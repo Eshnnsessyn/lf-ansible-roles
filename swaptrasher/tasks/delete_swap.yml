@@ -1,0 +1,11 @@
+---
+- name: Delete swapfile
+  ansible.builtin.file:
+    path: '{{ item.split().0 }}'
+    state: absent
+  when:  item.split().1 == 'file'
+- name: clear /etc/fstab
+  ansible.builtin.lineinfile:
+    path: /etc/fstab
+    regexp: '^{{ item.split().0 }}.'
+    state: absent
