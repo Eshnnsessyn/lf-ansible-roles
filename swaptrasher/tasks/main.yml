@@ -1,23 +1,41 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # tasks file for swaptrasher
+- name: test
+  debug:
+    msg: '{{mode_output}}'
+
 - block:
   - name: Check swaps
     ansible.builtin.shell:  swapon --show=NAME,TYPE --noheadings
     register: swap_list
-
   - name: Show captured file
     debug:
       msg: '{{ swap_list.stdout_lines }}'
-
   - name: Turn off swap
     ansible.builtin.shell: swapoff -a
-
   - name: Remove swap
     include_tasks: delete_swap.yml
     loop: '{{ swap_list.stdout_lines }}'
+  when:
+    - mode_output == '1'
+    - ansible_facts.swaptotal_mb > 0
 
-  when: ansible_facts.swaptotal_mb > 0
+- block:
+  - name: Turn off swap
+    ansible.builtin.shell: swapoff -a
+  - name: Remove swap
+    ansible.builtin.file:
+      path: '{{ swapfile_path }}'
+      state: absent
+  - name: Remove fstab entry
+    ansible.builtin.lineinfile:
+      path: /etc/fstab
+      regexp: '^{{ swapfile_path }}.'
+      state: absent
+  when:
+    - mode_output == '2'
+    - ansible_facts.swaptotal_mb > 0
 
 - name: Show message if no swap found
   debug:
