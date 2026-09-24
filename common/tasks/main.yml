@@ -11,6 +11,9 @@
 #      - "swapfree_mb={{ ansible_facts.swapfree_mb }}"
 #      - "swaptotal_mb={{ ansible_facts.swaptotal_mb }}"
 
+- name: include task hostname
+  include_tasks: hostname.yml
+
 - block:
   - name: create a swap file
     shell: fallocate -l {{ swap_size }} /swapfile

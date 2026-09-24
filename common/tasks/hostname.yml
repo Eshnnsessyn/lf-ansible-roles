@@ -2,10 +2,10 @@
 ---
 - name: Change hostname
   ansible.builtin.hostname:
-    name: abyrvalg
+    name: '{{ inventory_hostname }}'
 
 - name: Change entry in /etc/hosts
   ansible.builtin.replace:
     path: /etc/hosts
-    regexp: '(\s+)[a-z]{4}amethyst(\s+.*)?$'
-    replace: '\1abyrvalg\2'
+    regexp: '^(127\.0\.1\.1\s+)\S+$'
+    replace: '\1{{ inventory_hostname }}'
