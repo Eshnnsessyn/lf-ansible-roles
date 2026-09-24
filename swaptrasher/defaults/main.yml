@@ -2,3 +2,4 @@
 ---
 # defaults file for swaptrasher
 swapfile_path: /swapfile
+mode_output: 2

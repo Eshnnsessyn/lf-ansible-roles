@@ -8,18 +8,16 @@
   - name: Show captured file
     debug:
       msg: '{{ swap_list.stdout_lines }}'
-  - name: Turn off swap
-    ansible.builtin.shell: swapoff -a
   - name: Remove swap
     include_tasks: delete_swap.yml
     loop: '{{ swap_list.stdout_lines }}'
   when:
-    - mode_output == '1'
+    - mode_output == 1
     - ansible_facts.swaptotal_mb > 0
 
 - block:
   - name: Turn off swap
-    ansible.builtin.shell: swapoff -a
+    ansible.builtin.shell: 'swapoff {{ swapfile_path }}'
   - name: Remove swap
     ansible.builtin.file:
       path: '{{ swapfile_path }}'
@@ -30,7 +28,7 @@
       regexp: '^{{ swapfile_path }}.'
       state: absent
   when:
-    - mode_output == '2'
+    - mode_output == 2
     - ansible_facts.swaptotal_mb > 0
 
 - name: Show message if no swap found

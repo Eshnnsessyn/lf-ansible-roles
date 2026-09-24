@@ -1,4 +1,7 @@
 ---
+- name: Turn off swap
+  ansible.builtin.shell: swapoff {{ swapfile_path }}
+  when: item.split().1 == 'file'
 - name: Delete swapfile
   ansible.builtin.file:
     path: '{{ item.split().0 }}'
@@ -9,3 +12,4 @@
     path: /etc/fstab
     regexp: '^{{ item.split().0 }}.'
     state: absent
+  when: item.split().1 == 'file'
