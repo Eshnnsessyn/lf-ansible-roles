@@ -1,6 +1,6 @@
 ---
 - name: Turn off swap
-  ansible.builtin.shell: swapoff {{ swapfile_path }}
+  ansible.builtin.shell: swapoff {{ item.split().0 }}
   when: item.split().1 == 'file'
 - name: Delete swapfile
   ansible.builtin.file:
