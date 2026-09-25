@@ -1,5 +1,5 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # defaults file for addsudoer
-sudoer_name:
-  - user
+users:
+  - username: user
