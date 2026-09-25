@@ -1,0 +1,18 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for push_ssh_pub
+- name: add .ssh folder in ~/ for {{ username }}
+  ansible.builtin.file:
+    path: /home/{{ username }}/.ssh
+    state: directory
+    mode: '0700'
+    owner: '{{ username }}'
+    group: '{{ username }}'
+- name: add 'authorized_keys' in ~/.ssh for {{ username }}
+  ansible.builtin.copy:
+    src: '{{ path_to_pub }}'
+    dest: /home/{{ username }}/.ssh/authorized_keys
+    mode: '0600'
+    owner: '{{ username }}'
+    group: '{{ username }}'
+

@@ -1,0 +1,5 @@
+#SPDX-License-Identifier: MIT-0
+---
+# defaults file for push_ssh_pub
+username: user
+path_to_pub: ./id_rsa.pub
