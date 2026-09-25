@@ -31,10 +31,10 @@
       owner: '{{ item.username }}'
       group: '{{ item.username }}'
   - name: add 'authorized_keys' in ~/.ssh for {{ item.username }}
-    ansible.possix.authorized_keys:
+    ansible.posix.authorized_key:
       user: '{{ item.username }}'
       state: present
-      key: "{{ lookup('file', '{{ item.path_to_pub }}') }}"
+      key: "{{ lookup('file', {{ item.path_to_pub }}) }}"
   when: item.add_ssh_pub == 1
 
 - name: add /etc/sudoers.d/ entry

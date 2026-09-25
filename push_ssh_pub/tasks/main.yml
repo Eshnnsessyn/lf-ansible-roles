@@ -9,10 +9,8 @@
     owner: '{{ username }}'
     group: '{{ username }}'
 - name: add 'authorized_keys' in ~/.ssh for {{ username }}
-  ansible.builtin.copy:
-    src: '{{ path_to_pub }}'
-    dest: /home/{{ username }}/.ssh/authorized_keys
-    mode: '0600'
-    owner: '{{ username }}'
-    group: '{{ username }}'
-
+  ansible.posix.authorized_key:
+    user: '{{ username }}'
+    state: present
+    key: "{{ lookup('file', item) }}"
+  loop: '{{ key_paths }}'
