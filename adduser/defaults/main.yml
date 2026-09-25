@@ -1,3 +1,12 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # defaults file for adduser
+users:
+  - username: user         # Дефолтное имя пользователя
+    shell:                 # Дефолтная оболочка
+    create_home: 0         # Создать домашнюю директорию или нет; 0 - нет, 1 - да.
+    add_groups:            # Добавить в группы
+    comment: default user  # Комментарий по умолчанию
+    add_ssh_pub: 0         # Добавить публичную часть ключа в authorized_keys; 0 - нет, 1 - да
+    path_to_pub:           # Путь к pub на локальном пк
+    is_sudoer:  0          # Должна ли быть добавлена запись в /etc/sudoers.d/; 0 - нет, 1 - да

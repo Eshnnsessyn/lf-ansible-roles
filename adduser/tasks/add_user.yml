@@ -1,0 +1,50 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for adduser:
+- name: add user with {{ item.username }}
+  ansible.builtin.user:
+    name: '{{ item.username }}'
+    shell: '{{ item.shell }}'
+- name: add comment for {{ item.username }}
+  ansible.builtin.user:
+    name: '{{ item.username }}'
+    comment: '{{ item.comment }}'
+  when: item.comment is defined
+- name: add home for {{ item.username }}
+  ansible.builtin.user:
+    name: '{{ item.username }}'
+    create_home: yes
+  when: item.create_home == 1
+- name: add groups for {{ item.username }}
+  ansible.builtin.user:
+    name: '{{ item.username }}'
+    groups: '{{ item.add_groups }}'
+    append: yes
+  when: item.add_groups is defined
+
+- block:
+  - name: add .ssh folder in ~/ for {{ item.username }}
+    ansible.builtin.file:
+      path: /home/{{ item.username }}/.ssh
+      state: directory
+      mode: '0700'
+      owner: '{{ item.username }}'
+      group: '{{ item.username }}'
+  - name: add 'authorized_keys' in ~/.ssh for {{ item.username }}
+    ansible.builtin.copy:
+      src: '{{ item.path_to_pub }}'
+      dest: /home/{{ item.username }}/.ssh/authorized_keys
+      mode: '0600'
+      owner: '{{ item.username }}'
+      group: '{{ item.username }}'
+  when: item.add_ssh_pub == 1
+
+- name: add /etc/sudoers.d/ entry
+  ansible.builtin.copy:
+    dest: /etc/sudoers.d/{{ item.username }}
+    content: '{{ item.username }} ALL=(ALL) NOPASSWD: ALL'
+    owner: root
+    group: root
+    mode: '0440'
+    validate: 'visudo -csf %s'
+  when: item.is_sudoer == 1
