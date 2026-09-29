@@ -4,3 +4,9 @@
 swap_size: 1G
 swap_path: /swapfile
 pref_timezone: Europe/Moscow
+packages:
+  - htop
+  - git
+  - net-tools
+  - wget
+

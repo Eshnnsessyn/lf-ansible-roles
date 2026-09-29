@@ -5,12 +5,6 @@
   community.general.timezone:
     name: '{{ pref_timezone }}'
 
-#- name: Debug swap facts
-#  ansible.builtin.debug:
-#    msg:
-#      - "swapfree_mb={{ ansible_facts.swapfree_mb }}"
-#      - "swaptotal_mb={{ ansible_facts.swaptotal_mb }}"
-
 - name: include task hostname
   include_tasks: hostname.yml
 
@@ -44,3 +38,12 @@
       passno: 0
       dump: 0
       state: present
+
+- name: installing packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  loop: "{{ packages }}"
+  loop_control:
+    label: "{{ item }}"
