@@ -1,11 +1,9 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # defaults file for docker
-extra_packages:
-  - ca-certificates
-  - curl
-  - software-properties-common
-docker_extras:
+docker_extra_packages:
   - docker-ce
+  - ca-certificates
+  - sogtware-properties-common
 docker_compose_ver: 5.5.1
 docker_user: user
