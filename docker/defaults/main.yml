@@ -7,3 +7,5 @@ extra_packages:
   - software-properties-common
 docker_extras:
   - docker-ce
+docker_compose_ver: 5.5.1
+docker_user: user

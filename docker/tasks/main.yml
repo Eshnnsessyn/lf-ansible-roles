@@ -54,6 +54,27 @@
     name: docker
     state: started
     enabled: yes
+
+- name: Get hardware name
+  ansible.builtin.shell: echo $(uname -m)
+  register: uname_result
+
+- name: Append {{ docker_user }} to docker group
+  ansible.builtin.user:
+    name: "{{ docker_user }}"
+    groups: docker
+    append: true 
+
+#- name: debug
+#  debug:
+#    msg: "{{ uname_result.stdout }}"
+
+- name: Get docker-compose
+  ansible.builtin.get_url:
+    url: https://github.com/docker/compose/releases/download/v{{ docker_compose_ver }}/docker-compose-Linux-{{ uname_result.stdout }}
+    dest: /usr/bin/docker-compose
+    mode: "0755"
+
 #- name: Show distrib release
 #  debug:
 #    msg: "{{ ansible_distribution_release }}"
