@@ -18,19 +18,20 @@
     group: 'root'
     force: true
 
-- name: De-armor Docker GPG
-  ansible.builtin.command: gpg --dearmor --yes --output /etc/apt/keyrings/docker.gpg /etc/apt/keyrings/docker.asc
-  args:
-    creates: /etc/apt/keyrings/docker.gpg owner=root group=root mode=644
+#- name: De-armor Docker GPG
+#  ansible.builtin.command: gpg --dearmor --yes --output /etc/apt/keyrings/docker.gpg /etc/apt/keyrings/docker.asc
+#  args:
+#    creates: /etc/apt/keyrings/docker.gpg owner=root group=root mode=644
 
 - name: Add Docker repo
   ansible.builtin.apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
     state: present
 
 - name: Update cache
   ansible.builtin.apt:
     update_cache: yes
+    cache_valid_time: 3600
 
 - name: Install docker
   ansible.builtin.apt:
@@ -47,25 +48,18 @@
     enabled: yes
 
 - name: Get hardware name
-  ansible.builtin.shell: echo $(uname -m)
+  ansible.builtin.command: uname -m
   register: uname_result
+  changed_when: false
 
 - name: Append {{ docker_user }} to docker group
   ansible.builtin.user:
     name: "{{ docker_user }}"
     groups: docker
-    append: true 
-
-#- name: debug
-#  debug:
-#    msg: "{{ uname_result.stdout }}"
+    append: true
 
 - name: Get docker-compose
   ansible.builtin.get_url:
     url: https://github.com/docker/compose/releases/download/v{{ docker_compose_ver }}/docker-compose-Linux-{{ uname_result.stdout }}
     dest: /usr/bin/docker-compose
     mode: "0755"
-
-#- name: Show distrib release
-#  debug:
-#    msg: "{{ ansible_distribution_release }}"

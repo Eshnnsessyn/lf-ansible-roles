@@ -4,6 +4,6 @@
 docker_extra_packages:
   - docker-ce
   - ca-certificates
-  - sogtware-properties-common
+  - software-properties-common
 docker_compose_ver: 5.5.1
 docker_user: user
