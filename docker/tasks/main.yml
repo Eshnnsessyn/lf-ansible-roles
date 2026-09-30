@@ -18,11 +18,6 @@
     group: 'root'
     force: true
 
-#- name: De-armor Docker GPG
-#  ansible.builtin.command: gpg --dearmor --yes --output /etc/apt/keyrings/docker.gpg /etc/apt/keyrings/docker.asc
-#  args:
-#    creates: /etc/apt/keyrings/docker.gpg owner=root group=root mode=644
-
 - name: Add Docker repo
   ansible.builtin.apt_repository:
     repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
